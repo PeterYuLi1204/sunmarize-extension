@@ -12,16 +12,6 @@
     "background": {
         "service_worker": "scripts/background.js"
     },
-    "content_scripts": [
-        {
-            "js": [
-                "scripts/extract.js"
-            ],
-            "matches": [
-                "<all_urls>"
-            ]
-        }
-    ],
     "action": {
         "default_icons": {
             "16": "images/icon-16.png",

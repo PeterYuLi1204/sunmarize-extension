@@ -1,7 +1,9 @@
 const allPTags = document.getElementsByTagName("p");
 
-console.log(allPTags)
+var articleText = "";
 
 for (const pTag of allPTags) {
-    console.log(pTag.textContent)
+    articleText += pTag.textContent;
 }
+
+console.log(articleText);
