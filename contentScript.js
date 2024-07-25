@@ -10,8 +10,4 @@ function getArticleText() {
     return articleText;
 }
 
-function summarize() {
-    
-}
-
 getArticleText();

@@ -1,16 +1,5 @@
-// async function getActiveTab() {
-//     const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
+(async () => {
+  var response = await chrome.runtime.sendMessage({text: "popup"});
 
-//     console.log(tab.id)
-
-//     var results = await chrome.scripting.executeScript({
-//         target: { tabId: tab.id },
-//         files: ["scripts/summarize.js"],
-//     });
-
-//     console.log(results[0].result);
-// }
-
-// getActiveTab()
-
-chrome.runtime.sendMessage({text: "popup"})
+  document.getElementById("summary").innerText = response.result;
+})()
