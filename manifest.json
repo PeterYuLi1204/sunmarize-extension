@@ -12,6 +12,12 @@
     "background": {
         "service_worker": "scripts/background.js"
     },
+    "web_accessible_resources": [
+        {
+            "resources": ["config.json"],
+            "matches": ["<all_urls>"]
+        }
+    ],
     "action": {
         "default_icons": {
             "16": "images/icon-16.png",
@@ -22,6 +28,7 @@
     },
     "permissions": [
         "activeTab",
-        "scripting"
+        "scripting",
+        "storage"
     ]
 }
