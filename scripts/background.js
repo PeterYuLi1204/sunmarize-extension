@@ -1,11 +1,13 @@
 import {apiKey} from "/config.js"
 
 async function summarizeText(text) {
+  // Variables
   const prompt = `Summarize the following article while ignoring information about the outlet and author and return only a list of the main points:${text}`;
   const apiURL = 'https://api.openai.com/v1/chat/completions';
   const model = "gpt-4o-mini"
   const max_tokens = 2000
 
+  // RESTful API call
   const response = await fetch(apiURL, {
     method: "POST",
     headers: {
@@ -19,36 +21,42 @@ async function summarizeText(text) {
     })
   })
   
+  // Check if call was okay
   if (!response.ok) {
     throw new Error(`HTTP error! status ${response.status}`);
   }
 
+  // Isolate model's response
   const result = await response.json();
-  
   const summary = result.choices[0]["message"]["content"];
 
   return summary;
 }
 
 const handleSummarize = async (sendResponse) => {
+  // Find the active tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-    const results = await chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      files: ["/scripts/contentScript.js"],
-    });
+  // Call Chrome API to run content script
+  const results = await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ["/scripts/contentScript.js"],
+  });
 
-    var articleText = results[0].result;
+  // Feed article text into summarize
+  var articleText = results[0].result;
+  const summary = await summarizeText(articleText)
 
-    const summary = await summarizeText(articleText)
-
-    sendResponse({result: summary});
+  // Send response back to popup script
+  sendResponse({result: summary});
 } 
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
+  // Check if message came from popup and send response asynchronously
   if (message.text === "popup") {
     handleSummarize(sendResponse)
   }
 
+  // Return true immediately to signal that there will be a response
   return true;
 });
