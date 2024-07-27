@@ -1,0 +1,8 @@
+body, html {
+    width: 800px; /* Set the width of the HTML document */
+    height: 600px; /* Set the height of the HTML document */
+}
+
+#summary {
+    font-size: 16px; /* Example of changing the size of text */
+}

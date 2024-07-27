@@ -35,7 +35,7 @@ const handleSummarize = async (sendResponse) => {
 
     const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      files: ["contentScript.js"],
+      files: ["/scripts/contentScript.js"],
     });
 
     var articleText = results[0].result;
