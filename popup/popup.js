@@ -3,10 +3,13 @@
   var response = await chrome.runtime.sendMessage({text: "popup"});
 
   // Turn response into an array of strings
-  const summaryPoints = response.result.split('\n');
+  const summaryPoints = response.result.split(';');
 
-  console.log(summaryPoints)
-  console.log(response.result)
+  // Delete loading message
+  document.getElementById("loading").remove();
+
+  console.log(summaryPoints);
+  console.log(response.result);
 
   // Find the unordered list element in HTML and add to it
   const summaryList = document.getElementById("summary")
