@@ -1,8 +1,42 @@
+:root {
+    --font-family: 'Roboto', sans-serif;
+    --base-font-size: 16px;
+}
+
 body, html {
-    width: 800px; /* Set the width of the HTML document */
+    width: 600px; /* Set the width of the HTML document */
     height: 600px; /* Set the height of the HTML document */
+    margin: 0;
+    padding: 0;
+    background-color: #fdfdff;
+}
+
+header {
+    padding: 0.2rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    background-color: #ffe9a6;
+}
+
+header img {
+    width: 7rem;
 }
 
 #summary {
+    padding: 0rem 1rem;
     font-size: 16px; /* Example of changing the size of text */
+}
+
+footer {
+    margin: 0;
+    position: fixed;
+    bottom: 0;
+    background-color: #ffcd80;
+}
+
+footer a, footer p {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
 }

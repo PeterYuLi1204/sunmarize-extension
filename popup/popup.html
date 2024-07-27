@@ -1,9 +1,24 @@
 <html>
     <head>
+        <!-- apply css reset -->
+        <link rel="stylesheet" href="assets/stylesheets/reset.css">
+        <!-- apply our own stylesheet-->
         <link rel="stylesheet" href="popup.css">
+        <!-- get google fonts (roboto) -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <ul id="summary"></ul>
+        <header>
+            <img src="../images/icon-128.png"></img>
+            <h1> Sunmarizer </h1>
+        </header>
+        <main id="main-content">
+            <p id="summary">Loading...</p>
+        </main>
+        <footer>
+            <p> P. Li 2024 </p>
+            <a id="back_to_top" href="#header"> Back to top </a>
+        </footer>
         <script src="popup.js"></script>
     </body>
 </html>
