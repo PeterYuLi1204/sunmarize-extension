@@ -2,7 +2,7 @@ import {apiKey} from "/config.js"
 
 async function summarizeText(text) {
   // Variables
-  const format = "Ignore information about the outlet, author, and unrelated news stories and summarize the article into as few points as possible while remaining accurate and return only the main points without prefixes and with a semicolon character separating each one";
+  const format = "Ignore information about the outlet, author, and unrelated news stories and summarize the article into as few points as possible while remaining accurate and return only the main points without prefixes, first letter capitalized and with a semicolon character separating each one";
   const apiURL = 'https://api.openai.com/v1/chat/completions';
   const model = "gpt-4o-mini"
   const max_tokens = 2000
