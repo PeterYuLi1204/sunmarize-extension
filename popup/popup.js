@@ -1,4 +1,4 @@
-(async () => {
+(async function () {
   // Send message using Chrome API to trigger background script
   var response = await chrome.runtime.sendMessage({text: "popup"});
 
@@ -18,4 +18,4 @@
     listItem.textContent = point;
     summaryList.appendChild(listItem);
   }
-})()
+})();

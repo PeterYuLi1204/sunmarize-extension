@@ -33,7 +33,7 @@ async function summarizeText(text) {
   return summary;
 }
 
-const handleSummarize = async (sendResponse) => {
+async function handleSummarize(sendResponse) {
   // Find the active tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
