@@ -11,6 +11,11 @@ body, html {
     background-color: #fdfdff;
 }
 
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
 header {
     padding: 0.2rem 1rem;
     display: flex;
@@ -23,8 +28,13 @@ header img {
     width: 7rem;
 }
 
-#summary {
+p {
     padding: 0rem 1rem;
+    font-size: 16px; /* Example of changing the size of text */
+}
+
+#summary {
+    padding: 0rem 1rem 0rem 2.5rem;
     font-size: 16px; /* Example of changing the size of text */
 }
 
