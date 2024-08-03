@@ -1,6 +1,6 @@
 (async function () {
   // Send message using Chrome API to trigger background script
-  var response = await chrome.runtime.sendMessage({text: "popup"});
+  let response = await chrome.runtime.sendMessage({text: "popup"});
 
   // Turn response into an array of strings
   const summaryPoints = response.result.split(';');

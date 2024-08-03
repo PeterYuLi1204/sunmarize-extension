@@ -1,7 +1,7 @@
 import {apiKey} from "/config.js"
 
 async function summarizeText(text) {
-  // Variables
+  // Parameters
   const format = "Ignore information about the outlet, author, and unrelated news stories and summarize the article into as few points as possible while remaining accurate and return only the main points without prefixes, first letter capitalized and with a semicolon character separating each one";
   const apiURL = 'https://api.openai.com/v1/chat/completions';
   const model = "gpt-4o-mini"
@@ -44,7 +44,7 @@ async function handleSummarize(sendResponse) {
   });
 
   // Feed article text into summarize
-  var articleText = results[0].result;
+  let articleText = results[0].result;
   const summary = await summarizeText(articleText)
 
   // Send response back to popup script
