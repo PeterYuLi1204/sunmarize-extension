@@ -3,4 +3,8 @@
   <h1> Sunmarize Extension </h1>
 </div>
 
-<p> <b> Google Chrome Extension </b> for summarizing news articles with one single click </p>
+<p> <b> Google Chrome Extension </b> for summarizing news articles with one single click utilizing the OpenAI API </p>
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/a56a9a4d-2f75-4ace-aea3-8fdcebef786a">
+</div>
