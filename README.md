@@ -6,5 +6,5 @@
 <p> <b> Google Chrome Extension </b> for summarizing news articles with one single click utilizing the OpenAI API </p>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/a56a9a4d-2f75-4ace-aea3-8fdcebef786a" width=80%>
+  <img src="https://github.com/user-attachments/assets/580ad9cb-406a-4a4f-afdc-e98835a2832e" width=80%>
 </div>
