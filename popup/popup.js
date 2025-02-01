@@ -6,7 +6,7 @@ port.postMessage({content: "Sunmarize"});
 port.onMessage.addListener((msg) => {
   if (msg.final === true) {
     port.disconnect();
-  } else {
+  } else if (msg.content !== undefined) {
     displaySummary(msg.content);
   } 
 });
