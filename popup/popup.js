@@ -1,21 +1,26 @@
-(async function () {
-  // Send message using Chrome API to trigger background script
-  let response = await chrome.runtime.sendMessage({text: "popup"});
+// Create a long-lived connection and initialize the summarization
+const port = chrome.runtime.connect({name: "popup"});
+port.postMessage({content: "Sunmarize"});
 
-  // Turn response into an array of strings
-  const summaryPoints = response.result.split(';');
+// Handle received messages
+port.onMessage.addListener((msg) => {
+  if (msg.final === true) {
+    port.disconnect();
+  } else {
+    displaySummary(msg.content);
+  } 
+});
 
-  // Delete loading message
-  document.getElementById("loading").remove();
+const summaryList = document.getElementById("summary");
+let currentPoint;
 
-  console.log(summaryPoints);
-  console.log(response.result);
-
-  // Find the unordered list element in HTML and add to it
-  const summaryList = document.getElementById("summary")
-  for (point of summaryPoints) {
-    const listItem = document.createElement('li');
-    listItem.textContent = point;
-    summaryList.appendChild(listItem);
+// Create a new point if it's a delimiter
+// Otherwise append text to the current point
+function displaySummary(text) {
+  if (text === ";" || !currentPoint) {
+    currentPoint = document.createElement('li');
+    summaryList.appendChild(currentPoint);
+  } else {
+    currentPoint.textContent += text;
   }
-})();
+}

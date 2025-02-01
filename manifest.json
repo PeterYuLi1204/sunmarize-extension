@@ -22,6 +22,9 @@
             "128": "images/icon-128.png"
         }
     },
+    "host_permissions": [
+        "https://api.openai.com/*"
+    ],
     "permissions": [
         "activeTab",
         "scripting"

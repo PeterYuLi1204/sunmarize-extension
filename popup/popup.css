@@ -4,8 +4,8 @@
 }
 
 body, html {
-    width: 600px; /* Set the width of the HTML document */
-    height: 600px; /* Set the height of the HTML document */
+    width: 600px;
+    height: 600px;
     margin: 0;
     padding: 0;
     background-color: #fdfdff;
@@ -22,20 +22,21 @@ header {
     align-items: center;
     gap: 1.2rem;
     background-color: #ffe9a6;
-}
 
-header img {
-    width: 7rem;
+    img {
+        width: 7rem;
+    }
 }
 
 p {
     padding: 0rem 1rem;
-    font-size: 16px; /* Example of changing the size of text */
+    font-size: 16px;
 }
 
 #summary {
     padding: 0rem 1rem 0rem 2.5rem;
-    font-size: 16px; /* Example of changing the size of text */
+    font-size: 16px; 
+    overflow-y: auto;
 }
 
 footer {
@@ -43,10 +44,10 @@ footer {
     position: fixed;
     bottom: 0;
     background-color: #ffcd80;
-}
 
-footer a, footer p {
-    margin: 0;
-    padding: 0;
-    display: inline-block;
+    a, p {
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+    }
 }
