@@ -17,10 +17,17 @@ let currentPoint;
 // Create a new point if it's a delimiter
 // Otherwise append text to the current point
 function displaySummary(text) {
-  if (text === ";" || !currentPoint) {
+  if (!currentPoint) {
     currentPoint = document.createElement('li');
     summaryList.appendChild(currentPoint);
-  } else {
-    currentPoint.textContent += text;
+  }
+
+  for (const c of text) {
+    if (c === ";") {
+      currentPoint = document.createElement('li');
+      summaryList.appendChild(currentPoint);
+    } else {
+      currentPoint.textContent += currentPoint.textContent.trim() === "" ? c.toUpperCase() : c;
+    }
   }
 }
