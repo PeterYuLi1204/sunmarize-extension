@@ -1,13 +1,13 @@
 (function () {
-    // Find all p tags from active tab (similar to Chrome's reading mode)
-    const allPTags = document.getElementsByTagName("p");
+  const selectedText = window.getSelection().toString();
+  if (selectedText) {
+    return selectedText;
+  }
 
-    let articleText = "";
-
-    // Combine all article text together
-    for (const pTag of allPTags) {
-        articleText += " " + pTag.textContent;
-    }
-
-    return articleText;
+  const allPTags = document.getElementsByTagName("p");
+  let articleText = "";
+  for (const pTag of allPTags) {
+    articleText += " " + pTag.textContent;
+  }
+  return articleText;
 })();
