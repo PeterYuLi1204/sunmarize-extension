@@ -1,6 +1,5 @@
 :root {
     --font-family: 'Roboto', sans-serif;
-    --base-font-size: 16px;
 }
 
 body, html {
@@ -9,10 +8,13 @@ body, html {
     margin: 0;
     padding: 0;
     background-color: #fdfdff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 h1 {
-    font-size: 28px;
+    font-size: 2rem;
     font-weight: 700;
 }
 
@@ -30,24 +32,32 @@ header {
 
 p {
     padding: 0rem 1rem;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 #summary {
     padding: 0rem 1rem 0rem 2.5rem;
-    font-size: 16px; 
+    font-size: 1rem; 
     overflow-y: auto;
 }
 
 footer {
     margin: 0;
-    position: fixed;
+    /* position: fixed; */
+    padding: 0.5rem 1rem;
     bottom: 0;
     background-color: #ffcd80;
+    display: flex;
+    justify-content: space-between;
 
     a, p {
         margin: 0;
         padding: 0;
         display: inline-block;
     }
+}
+
+.model-selection {
+    /* display: flex; */
+    margin-left: 80%;
 }

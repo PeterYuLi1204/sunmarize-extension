@@ -1,5 +1,8 @@
 import { openaiApiKey, geminiApiKey } from "/config.js";
 
+const PROMPT =
+  "Summarize the provided news article by extracting its core factual content into 2 to 8 main points. Prioritize accuracy and relevance to the article's primary topic. Exclude any references to the news outlet, author, or unrelated stories. Format each point as a full sentence separated by semicolons. Example: 'Climate change impacts coastal cities;New policy aims to reduce emissions by 2030;Scientists urge immediate action'";
+
 // Retrieve all text from article
 async function retrieveText() {
   // Find the active tab
@@ -16,60 +19,38 @@ async function retrieveText() {
   return articleText;
 }
 
-// Make API request and return ReadableStream
-async function openaiSummarize(text) {
-  // Parameters
-  const instructions =
-    "Summarize the provided news article by extracting its core factual content into 2-5 main points. Prioritize accuracy and relevance to the article's primary topic. Exclude any references to the news outlet, author, or unrelated stories. Format each point as follows: Start with a capital letter, use plain text (no markdown), omit ending punctuation, and separate points with semicolons. Example: 'Climate change impacts coastal cities;New policy aims to reduce emissions by 2030;Scientists urge immediate action'.";
-  const apiURL = "https://api.openai.com/v1/chat/completions";
-  const model = "gpt-4o-mini";
+async function getSelectedModel() {
+  const model = (await chrome.storage.local.get(["model"])).model;
 
-  // API call using fetch (OpenAI SDK not accessible in browser)
-  const response = await fetch(apiURL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${openaiApiKey}`,
-    },
-    body: JSON.stringify({
-      model: model,
-      messages: [
-        { role: "developer", content: instructions },
-        { role: "user", content: text },
-      ],
-      stream: true,
-    }),
-  });
-
-  // Check if the API call was successful
-  if (!response.ok) {
-    port.postMessage({
-      final: true,
-      content: `HTTP error! Status ${response.status}`,
-    });
-    return null;
+  if (model === "chatgpt") {
+    return {
+      apiURL: "https://api.openai.com/v1/chat/completions",
+      model: "gpt-4o-mini",
+      apiKey: openaiApiKey,
+    };
   }
 
-  return response.body.getReader();
+  if (model === "gemini") {
+    return {
+      apiURL:
+        "https://generativelanguage.googleapis.com/v1beta:chatCompletions",
+      model: "gemini-2.0-flash-exp",
+      apiKey: geminiApiKey,
+    };
+  }
 }
 
-async function geminiSummarize(text) {
-  const instructions =
-    "Summarize the provided news article by extracting its core factual content into 2-5 main points. Prioritize accuracy and relevance to the article's primary topic. Exclude any references to the news outlet, author, or unrelated stories. Format each point as follows: Start with a capital letter, use plain text (no markdown), omit ending punctuation, and separate points with semicolons. Example: 'Climate change impacts coastal cities;New policy aims to reduce emissions by 2030;Scientists urge immediate action'.";
-  const apiURL =
-    "https://generativelanguage.googleapis.com/v1beta:chatCompletions";
-  const model = "gemini-2.0-flash-exp";
-
+async function summarize(text, { apiURL, model, apiKey }) {
   const response = await fetch(apiURL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${geminiApiKey}`,
+      Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
       model: model,
       messages: [
-        { role: "developer", content: instructions },
+        { role: "developer", content: PROMPT },
         { role: "user", content: text },
       ],
       stream: true,
@@ -119,8 +100,7 @@ chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
     if (msg.content === "Sunmarize") {
       const articleText = await retrieveText();
-      const reader = await openaiSummarize(articleText);
-      // const reader = await geminiSummarize(articleText);
+      const reader = await summarize(articleText, await getSelectedModel());
       if (reader !== null) {
         streamResults(reader, port);
       }

@@ -5,16 +5,26 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     </head>
     <body>
-        <header>
-            <img id="logo" src="../images/icon-128.png"></img>
-            <h1> Sunmarize </h1>
-        </header>
-        <main id="main-content">
-            <ul id="summary"></ul>
-        </main>
+        <div>
+            <header>
+                <img id="logo" src="../images/icon-128.png"></img>
+                <h1> Sunmarize </h1>
+            </header>
+            <main id="main-content">
+                <ul id="summary"></ul>
+            </main>
+        </div>
         <footer>
-            <p> P. Li, 2025&nbsp; </p>
-            <a id="back_to_top" href="#logo"> Back to top </a>
+            <div>
+                <p> P. Li, 2025&nbsp; </p>
+                <a id="back_to_top" href="#logo"> Back to top </a>
+            </div>
+            <div id="model-selection">
+                <input type="radio" id="chatgpt" name="model-option" value="chatgpt">
+                <label for="chatgpt">ChatGPT</label>
+                <input type="radio" id="gemini" name="model-option" value="gemini">
+                <label for="gemini">Gemini</label>
+            </div>
         </footer>
         <script type="module" src="popup.js"></script>
     </body>

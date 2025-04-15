@@ -1,3 +1,19 @@
+const summaryList = document.getElementById("summary");
+const modelSelection = document.getElementById("model-selection");
+
+// Find the stored model selection or set default value
+let model = (await chrome.storage.local.get(["model"])).model;
+if (!model) {
+  await chrome.storage.local.set({ model: "chatgpt" });
+  model = "chatgpt";
+}
+document.getElementById(model).checked = true;
+
+// Add a handler for model radio buttons to store selected option
+modelSelection.addEventListener("change", async (event) => {
+  await chrome.storage.local.set({ model: event.target.value });
+});
+
 // Create a long-lived connection and initialize the summarization
 const port = chrome.runtime.connect({ name: "popup" });
 port.postMessage({ content: "Sunmarize" });
@@ -11,7 +27,6 @@ port.onMessage.addListener((msg) => {
   }
 });
 
-const summaryList = document.getElementById("summary");
 let currentPoint;
 
 // Create a new point if it's a delimiter
