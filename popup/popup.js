@@ -1,7 +1,6 @@
 const summaryList = document.getElementById("summary");
 const modelSelection = document.getElementById("model-selection");
 
-// Find the stored model selection or set default value
 let model = (await chrome.storage.local.get(["model"])).model;
 if (!model) {
   await chrome.storage.local.set({ model: "chatgpt" });
@@ -9,17 +8,13 @@ if (!model) {
 }
 document.getElementById(model).checked = true;
 
-// Add a handler for model radio buttons to store selected option
 modelSelection.addEventListener("change", async (event) => {
   await chrome.storage.local.set({ model: event.target.value });
   summaryList.innerHTML = "";
   runSummary();
 });
 
-// Create a new point if it's a delimiter
-// Otherwise append text to the current point
 function displaySummary(text) {
-  // Get the last list item or create a new one if none exists
   let currentPoint = summaryList.lastElementChild || createNewPoint();
 
   for (const c of text) {
@@ -32,7 +27,6 @@ function displaySummary(text) {
   }
 }
 
-// Helper function to create and append a new list item
 function createNewPoint() {
   const newPoint = document.createElement("li");
   summaryList.appendChild(newPoint);

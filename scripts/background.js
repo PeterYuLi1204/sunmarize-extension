@@ -3,7 +3,6 @@ import { openaiApiKey, geminiApiKey } from "/config.js";
 const PROMPT =
   "Summarize the provided news article by extracting its core factual content into 2 to 8 main points. Prioritize accuracy and relevance to the article's primary topic. Exclude any references to the news outlet, author, or unrelated stories. Format each point as a full sentence separated by semicolons. Example: 'Climate change impacts coastal cities;New policy aims to reduce emissions by 2030;Scientists urge immediate action'";
 
-// Retrieve all text from article
 async function retrieveText() {
   // Find the active tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -14,7 +13,6 @@ async function retrieveText() {
     files: ["/scripts/contentScript.js"],
   });
 
-  // Return article text
   const articleText = results[0].result;
   return articleText;
 }
@@ -57,7 +55,6 @@ async function summarize(text, { apiURL, model, apiKey }) {
     }),
   });
 
-  // Check if the API call was successful
   if (!response.ok) {
     port.postMessage({
       final: true,
@@ -95,7 +92,6 @@ async function streamResults(reader, port) {
   port.postMessage({ final: true });
 }
 
-// Handle inital message from popup
 chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
     if (msg.content === "Sunmarize") {
