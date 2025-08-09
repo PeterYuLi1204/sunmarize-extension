@@ -10,7 +10,7 @@ async function retrieveText() {
   // Call Chrome API to run content script
   const results = await chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    files: ["/scripts/contentScript.js"],
+    files: ["scripts/contentScript.js"],
   });
 
   const articleText = results[0].result;
