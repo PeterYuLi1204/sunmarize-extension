@@ -5,7 +5,7 @@ async function retrieveText() {
   // Find the active tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-  if (!tab.id) {
+  if (!tab?.id) {
     throw new Error("No active tab found");
   }
 
@@ -43,7 +43,7 @@ async function summarize(
     body: JSON.stringify({
       model: model,
       messages: [
-        { role: "developer", content: PROMPT },
+        { role: "system", content: PROMPT },
         { role: "user", content: text },
       ],
       stream: true,
@@ -68,23 +68,43 @@ async function streamResults(
 ) {
   const decoder = new TextDecoder();
 
-  // Read chunks until complete
-  while (true) {
-    // Read the next chunk from the stream
-    const { value, done } = await reader.read();
-    if (done) break;
+  try {
+    // Read chunks until complete
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
 
-    // Decode the data as a string
-    const chunk = decoder.decode(value, { stream: true });
-    console.log("Received chunk:", chunk);
+      const chunk = decoder.decode(value, { stream: true });
 
-    // Split the string into lines and parse as JSON
-    for (const line of chunk.split("data: ")) {
-      if (line.startsWith("{")) {
-        const text = JSON.parse(line)["choices"][0]["delta"]["content"];
-        port.postMessage({ final: false, content: text });
+      // Parse SSE format properly
+      const lines = chunk.split('\n');
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6); // Remove "data: " prefix
+          
+          // Skip empty lines and [DONE] marker
+          if (data.trim() === '' || data.trim() === '[DONE]') continue;
+          
+          try {
+            const parsed = JSON.parse(data);
+            const content = parsed.choices?.[0]?.delta?.content;
+            
+            if (content) {
+              port.postMessage({ final: false, content });
+            }
+          } catch (parseError) {
+            console.warn('Failed to parse SSE data:', parseError);
+          }
+        }
       }
     }
+  } catch (error) {
+    console.error('Stream reading error:', error);
+    port.postMessage({
+      final: true,
+      content: 'Error reading stream: ' + (error as Error).message,
+    });
+    return;
   }
 
   // Send a message to close the port

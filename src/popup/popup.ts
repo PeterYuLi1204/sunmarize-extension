@@ -18,31 +18,30 @@ if (modelElement) {
 }
 
 modelSelection.addEventListener("change", async (event) => {
-  const value = ((event.target as HTMLInputElement)?.value) as ModelOption;
+  const value = (event.target as HTMLInputElement)?.value as ModelOption;
   await chrome.storage.local.set({ model: value });
   summaryList.innerHTML = "";
   runSummary();
 });
 
 function displaySummary(text: string) {
-  summaryList!.textContent += text;
-  // let currentPoint = summaryList!.lastElementChild || createNewPoint();
+  let currentPoint = summaryList!.lastElementChild || createNewPoint();
 
-  // for (const c of text) {
-  //   if (c === ";") {
-  //     currentPoint = createNewPoint();
-  //   } else {
-  //     currentPoint.textContent +=
-  //       currentPoint.textContent.trim() === "" ? c.toUpperCase() : c;
-  //   }
-  // }
+  for (const c of text) {
+    if (c === ";") {
+      currentPoint = createNewPoint();
+    } else {
+      currentPoint.textContent +=
+        currentPoint.textContent.trim() === "" ? c.toUpperCase() : c;
+    }
+  }
 }
 
-// function createNewPoint() {
-//   const newPoint = document.createElement("li");
-//   summaryList!.appendChild(newPoint);
-//   return newPoint;
-// }
+function createNewPoint() {
+  const newPoint = document.createElement("li");
+  summaryList!.appendChild(newPoint);
+  return newPoint;
+}
 
 // Create a long-lived connection and initialize the summarization
 function runSummary() {
