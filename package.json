@@ -1,5 +1,16 @@
 {
   "devDependencies": {
-    "@types/chrome": "^0.0.299"
+    "chrome-types": "^0.1.369",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "compile": "tsc",
+    "copy:assets": "copyfiles -u 1 src/assets/**/* dist",
+    "copy:popup": "copyfiles -u 1 \"src/popup/*.{html,css}\" dist",
+    "copy:manifest": "copyfiles manifest.json dist",
+    "build": "npm run clean && npm run compile && npm run copy:assets && npm run copy:popup && npm run copy:manifest"
   }
 }

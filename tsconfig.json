@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "outDir": "dist",
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "types": ["chrome-types"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
