@@ -1,16 +1,18 @@
-import { openaiApiKey, geminiApiKey } from "/config.js";
-
-const PROMPT =
-  "Summarize the provided news article by extracting its core factual content into 2 to 8 main points. Prioritize accuracy and relevance to the article's primary topic. Exclude any references to the news outlet, author, or unrelated stories. Format each point as a full sentence separated by semicolons. Example: 'Climate change impacts coastal cities;New policy aims to reduce emissions by 2030;Scientists urge immediate action'";
+import { ModelOption, MODEL_CONFIGS, PROMPT } from "../constants/config.js";
+import { ModelConfig } from "../constants/interfaces.js";
 
 async function retrieveText() {
   // Find the active tab
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
+  if (!tab.id) {
+    throw new Error("No active tab found");
+  }
+
   // Call Chrome API to run content script
   const results = await chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    files: ["scripts/contentScript.js"],
+    files: ["content/contentScript.js"],
   });
 
   const articleText = results[0].result;
@@ -18,27 +20,20 @@ async function retrieveText() {
 }
 
 async function getSelectedModel() {
-  const model = (await chrome.storage.local.get(["model"])).model;
-
-  if (model === "chatgpt") {
-    return {
-      apiURL: "https://api.openai.com/v1/chat/completions",
-      model: "gpt-4o-mini",
-      apiKey: openaiApiKey,
-    };
+  const model: ModelOption = (await chrome.storage.local.get(["model"])).model;
+  const modelConfig = MODEL_CONFIGS[model];
+  if (!modelConfig) {
+    throw new Error("Invalid model configuration");
   }
 
-  if (model === "gemini") {
-    return {
-      apiURL:
-        "https://generativelanguage.googleapis.com/v1beta:chatCompletions",
-      model: "gemini-2.0-flash-exp",
-      apiKey: geminiApiKey,
-    };
-  }
+  return modelConfig;
 }
 
-async function summarize(text, { apiURL, model, apiKey }) {
+async function summarize(
+  text: string,
+  port: chrome.runtime.Port,
+  { apiURL, model, apiKey }: ModelConfig
+) {
   const response = await fetch(apiURL, {
     method: "POST",
     headers: {
@@ -55,7 +50,7 @@ async function summarize(text, { apiURL, model, apiKey }) {
     }),
   });
 
-  if (!response.ok) {
+  if (!response.ok || !response.body) {
     port.postMessage({
       final: true,
       content: `HTTP error! Status ${response.status}`,
@@ -67,7 +62,10 @@ async function summarize(text, { apiURL, model, apiKey }) {
 }
 
 // Send summary to the popup as it's being decoded
-async function streamResults(reader, port) {
+async function streamResults(
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  port: chrome.runtime.Port
+) {
   const decoder = new TextDecoder();
 
   // Read chunks until complete
@@ -78,6 +76,7 @@ async function streamResults(reader, port) {
 
     // Decode the data as a string
     const chunk = decoder.decode(value, { stream: true });
+    console.log("Received chunk:", chunk);
 
     // Split the string into lines and parse as JSON
     for (const line of chunk.split("data: ")) {
@@ -96,7 +95,7 @@ chrome.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
     if (msg.content === "Sunmarize") {
       const articleText = await retrieveText();
-      const reader = await summarize(articleText, await getSelectedModel());
+      const reader = await summarize(articleText, port, await getSelectedModel());
       if (reader !== null) {
         streamResults(reader, port);
       }

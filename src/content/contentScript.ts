@@ -1,5 +1,5 @@
 (function () {
-  const selectedText = window.getSelection().toString();
+  const selectedText = window.getSelection()?.toString();
   if (selectedText) {
     return selectedText;
   }

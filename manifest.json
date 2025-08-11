@@ -10,11 +10,11 @@
     "128": "assets/icon-128.png"
   },
   "background": {
-    "service_worker": "scripts/background.js",
+    "service_worker": "background/background.js",
     "type": "module"
   },
   "action": {
-    "default_popup": "dist/popup/popup.html"
+    "default_popup": "popup/popup.html"
   },
   "permissions": ["activeTab", "scripting", "storage"]
 }
